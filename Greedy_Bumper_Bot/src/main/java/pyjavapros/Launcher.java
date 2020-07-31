@@ -47,7 +47,7 @@ public class Launcher extends ListenerAdapter {
     public static void main(String[] args) {
 
         // TODO Set token be accessible from env
-        var builder = JDABuilder.createDefault("NzA5Mzk3NTM4NTkxMjExNTMy.XrlT8Q.BzAEbgYTY7_f5t7fJFVQs3wJbVw");
+        var builder = JDABuilder.createDefault("NExNTMy.XrlT8Q.BzAEbgYTY7_f5t7fJFVQs3wJbVw");
 
         try {
             JDA jda = builder.build();
