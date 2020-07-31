@@ -13,7 +13,6 @@ import pyjavapros.utilities.GuildMessageReference;
 
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class Launcher extends ListenerAdapter {
 
@@ -28,29 +27,27 @@ public class Launcher extends ListenerAdapter {
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         initializeListener();
-        LOGGER.info("Bot ready and online!! Live on", event.getGuildTotalCount(), " guilds.");
+        LOGGER.info("Bot ready and online!! Live on ", event.getGuildTotalCount(), " guilds.");
     }
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 
-        if (event.getAuthor().isBot())
-            return;
+        if (event.getAuthor().isBot()) return;
+        if (!event.getMessage().getContentRaw().startsWith(refer_token)) return;
 
         var ref = GuildMessageReference.build(event);
 
-        Optional<Command> optional = command_list.stream().filter(command -> command.call.equals(ref.getCmd())).findFirst();
+        command_list.stream().filter(cmd -> cmd.call.equals(ref.getCmd())).findFirst()
+                .ifPresent(command -> command.onGuildMessageReceived(ref));
 
-        if(optional.isPresent()) {
-            optional.get().onGuildMessageRecieved(ref);
-        }
-
+        LOGGER.general(ref);
     }
 
     public static void main(String[] args) {
 
         // TODO Set token be accessible from env
-        var builder = JDABuilder.createDefault("NzA5Mzk3NTM4NTkxMjExNTMy.XrlT8Q.AqTG_cri4LmUwv3ITZ1EriULSm0");
+        var builder = JDABuilder.createDefault("NzA5Mzk3NTM4NTkxMjExNTMy.XrlT8Q.BzAEbgYTY7_f5t7fJFVQs3wJbVw");
 
         try {
             JDA jda = builder.build();

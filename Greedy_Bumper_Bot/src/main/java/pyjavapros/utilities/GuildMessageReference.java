@@ -1,5 +1,6 @@
 package pyjavapros.utilities;
 
+import main.generalLogger.LOGGER;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import pyjavapros.Launcher;
 
@@ -23,8 +24,10 @@ public class GuildMessageReference {
 
     public String getCmd() {
         if (command == null) {
-            command = event.getMessage().getContentRaw();
-            command = command.substring(Launcher.refer_token.length(), command.indexOf(" "));
+            command = event.getMessage().getContentRaw().substring(Launcher.refer_token.length());
+            if (command.contains(" "))
+                command = command.substring(0, command.indexOf(" "));
+            LOGGER.general(command);
         }
         return command;
     }
