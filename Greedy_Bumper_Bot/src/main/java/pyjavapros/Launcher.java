@@ -33,6 +33,11 @@ public class Launcher extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 
+        if (event.getMessage().getMentionedMembers().stream().anyMatch(member -> member.getId().equals(event.getGuild().getSelfMember().getId()))) {
+            event.getChannel().sendMessage("Use **" + refer_token + "** as prefix to use me!").queue();
+            return;
+        }
+
         if (event.getAuthor().isBot()) return;
         if (!event.getMessage().getContentRaw().startsWith(refer_token)) return;
 
@@ -42,12 +47,13 @@ public class Launcher extends ListenerAdapter {
                 .ifPresent(command -> command.onGuildMessageReceived(ref));
 
         LOGGER.general(ref);
+
     }
 
     public static void main(String[] args) {
 
         // TODO Set token be accessible from env
-        var builder = JDABuilder.createDefault("NExNTMy.XrlT8Q.BzAEbgYTY7_f5t7fJFVQs3wJbVw");
+        var builder = JDABuilder.createDefault("NzAMy.XrlT8Q.rqdw4iPmvtHt2ogMWzXn7BsQinc");
 
         try {
             JDA jda = builder.build();
